@@ -30,12 +30,18 @@ class Lite
      * @param string $mch_id 商户号,不用支付可以不用配置
      */
 
-    public function __construct()
+    public function __construct($config = NULL)
     {
-        $this->appid = \PhalApi\DI()->config->get('app.Wechatmini')['appid'];
-        $this->secret = \PhalApi\DI()->config->get('app.Wechatmini')['secret_key'];
-        $this->mch_id = \PhalApi\DI()->config->get('app.Wechatmini')['mch_id'];
-        $this->mch_key = \PhalApi\DI()->config->get('app.Wechatmini')['mch_key'];
+        $this->config = $config;
+
+        if ($this->config === NULL) {
+            $this->config = \PhalApi\DI()->config->get('app.Wechatmini');
+        }
+        
+        $this->appid = $this->config['appid'];
+        $this->secret = $this->config['secret_key'];
+        $this->mch_id = $this->config['mch_id'];
+        $this->mch_key = $this->config['mch_key'];
 
         if (!$this->appid) {
             throw new BadRequestException('请配置appid', 600);
